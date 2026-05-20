@@ -1,11 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
+// 🔥 params NÃO é Promise
+type Params = {
+  params: {
+    id: string;
+  };
+};
+
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: Params
 ) {
-  const { id } = await context.params;
+  const { id } = params;
 
   const client = await prisma.client.findUnique({
     where: { id },
@@ -16,9 +23,9 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: Params
 ) {
-  const { id } = await context.params;
+  const { id } = params;
   const body = await req.json();
 
   const updated = await prisma.client.update({
@@ -31,9 +38,9 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: Params
 ) {
-  const { id } = await context.params;
+  const { id } = params;
 
   await prisma.client.delete({
     where: { id },
