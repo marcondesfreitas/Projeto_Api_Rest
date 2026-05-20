@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+type Context = {
+  params: Promise<{ id: string }>;
+};
+
+export async function GET(req: NextRequest, context: Context) {
   const { id } = await context.params;
 
   const client = await prisma.client.findUnique({
@@ -14,10 +15,7 @@ export async function GET(
   return Response.json(client);
 }
 
-export async function PUT(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function PUT(req: NextRequest, context: Context) {
   const { id } = await context.params;
   const body = await req.json();
 
@@ -29,10 +27,7 @@ export async function PUT(
   return Response.json(updated);
 }
 
-export async function DELETE(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(req: NextRequest, context: Context) {
   const { id } = await context.params;
 
   await prisma.client.delete({
